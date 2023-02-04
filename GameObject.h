@@ -32,6 +32,8 @@ public:
 
         velocity=Vector2D(0,0);
 
+        acceleration=Vector2D(0,0);
+
         width=param->getPosition().w;
 
         height=param->getPosition().h;
@@ -42,10 +44,11 @@ public:
 
 
     }
+    virtual ~GameObject(){}
     virtual void draw()
     {
         theTextureManager::Instance()->draw(textureID
-                                            ,(int)position.getX(),(int)position.getY(),width,height
+                                            ,(int)position.getX(),position.getY(),width,height
                                             ,src
                                             ,theGame::Instance()->getRenderer());
     };
@@ -62,13 +65,13 @@ public:
 
     virtual bool isCollide(GameObject *other)
     {
-        SDL_Rect otherRect;
-        otherRect.x=other->getPosition().getX();
-        otherRect.y=other->getPosition().getY();
+        SDL_FRect otherRect;
+        otherRect.x=other->getVector()->getX();
+        otherRect.y=other->getVector()->getY();
         otherRect.w=other->getWidth();
         otherRect.h=other->getHeight();
 
-        SDL_Rect rpos;
+        SDL_FRect rpos;
         rpos.x=position.getX();
         rpos.y=position.getY();
         rpos.w=width;
@@ -77,9 +80,9 @@ public:
         return en_collision(rpos, otherRect);
     }
 
-    virtual bool en_collision(SDL_Rect& a, SDL_Rect& b){
-        int topA,leftA,rightA,bottomA;
-        int topB,leftB,rightB,bottomB;
+    virtual bool en_collision(SDL_FRect& a, SDL_FRect& b){
+        float topA,leftA,rightA,bottomA;
+        float topB,leftB,rightB,bottomB;
         topA=a.y;
         leftA=a.x;
         rightA=a.x+a.w;
@@ -107,10 +110,11 @@ public:
             return false;
         }
         return true;
+
     }
 
-    Vector2D& getPosition(){
-        return this->position;
+    Vector2D* getVector(){
+        return &position;
     }
 
     void scale(float vscale){
@@ -135,11 +139,16 @@ public:
         return tag;
     }
 
-    Vector2D getVelocity(){
-        return velocity;
+    Vector2D* getVelocity(){
+        return &velocity;
     }
+
     Vector2D getAcceleration(){
         return acceleration;
+    }
+
+    void setAcceleration(Vector2D a){
+        acceleration=a;
     }
 };
 

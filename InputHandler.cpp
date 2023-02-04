@@ -10,6 +10,12 @@ InputHandler::InputHandler()
     {
         m_mouseStates.push_back(false);
     }
+
+    //initilisation of window event state
+    for(int i=0; i<sizeof(window_states); i++)
+    {
+        m_windowState.push_back(false);
+    }
 }
 
 void InputHandler::update(){
@@ -63,6 +69,26 @@ void InputHandler::update(){
                 }
 
             break;
+            case SDL_WINDOWEVENT:
+
+                switch(event.window.event){
+
+                    case SDL_WINDOWEVENT_ENTER:
+                        m_windowState[MOUSE_FOCUS]=true;
+                    break;
+
+                    case SDL_WINDOWEVENT_LEAVE:
+                        m_windowState[MOUSE_FOCUS]=false;
+                    break;
+
+                    case SDL_WINDOWEVENT_FOCUS_GAINED:
+                        m_windowState[KEYBOARD_FOCUS]=true;
+                    break;
+
+                    case SDL_WINDOWEVENT_FOCUS_LOST:
+                        m_windowState[KEYBOARD_FOCUS]=false;
+                    break;
+                }
         }
     }
 }

@@ -5,14 +5,21 @@
 class GameStateMachine{
 private:
     std::vector<GameState*>m_gameStates;
+    bool isShowBackState=false;
 public:
     void pushState(GameState *pState);
 
     void changeState(GameState *pState);
 
+    void setDisplayBackState(bool enable);
+
+    GameState *getCurrentState();
+
     void popState();
 
     void update();
+
+    void clean();
 
     void render();
 };

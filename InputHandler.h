@@ -9,7 +9,11 @@ enum mouses_state
     MIDDLE=1,
     RIGHT=0
 };
-
+enum window_states{
+    KEYBOARD_FOCUS,
+    MOUSE_FOCUS,
+    SIZE_CHANGED
+};
 class InputHandler
 {
 private:
@@ -26,8 +30,10 @@ private:
 
     const Uint8 *m_keyState;
 
+    std::vector<bool> m_windowState;
 
 public:
+
     static InputHandler* instance()
     {
         if(s_instance==0)
@@ -35,6 +41,10 @@ public:
             s_instance=new InputHandler();
         }
         return s_instance;
+    }
+
+    bool GetWindowState(window_states s){
+        return m_windowState[s];
     }
 
     /**
